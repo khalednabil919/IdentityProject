@@ -112,6 +112,8 @@ namespace BusinessLogic.Services.Auth
                 if (await _userManager.FindByNameAsync(registerRequest.UserName) is not null)
                     return new APIResult { message = "This Name Exists Before" };
 
+                var s = await _userManager.GetPhoneNumberAsync(user);
+
                 if (await _userManager.GetPhoneNumberAsync(user) is null)
                     return new APIResult { message = "Please set PhoneNumber" };
 
@@ -584,7 +586,7 @@ namespace BusinessLogic.Services.Auth
                issuer: _jwt.Issuer,
                audience: _jwt.Audience,
                claims: claims,
-               expires: DateTime.Now.AddSeconds(20),
+               expires: DateTime.Now.AddDays(70),
                signingCredentials: signingCredentials
                );
 

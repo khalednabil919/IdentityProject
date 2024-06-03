@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataAccess))]
-    [Migration("20230814205824_seedingRoles")]
-    partial class seedingRoles
+    [Migration("20240602174405_SeedRoles")]
+    partial class SeedRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,27 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Auth.RefreshTokenDevCreed", b =>
+            modelBuilder.Entity("Core.Entities.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("region");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Entity.RefreshTokenDevCreed", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +77,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("refreshTokenDevCreed");
                 });
 
-            modelBuilder.Entity("Core.Auth.User", b =>
+            modelBuilder.Entity("DataTransferObject.Entity.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -135,26 +155,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users", "security");
                 });
 
-            modelBuilder.Entity("Core.Entities.Region", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("region");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -180,6 +180,22 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", "security");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e1c1e2a6-44b5-4b07-a520-f2772732e4f1",
+                            ConcurrencyStamp = "cd9ddc08-10a9-49c5-8c14-1f4b4e38d665",
+                            Name = "Visitor",
+                            NormalizedName = "VISITOR"
+                        },
+                        new
+                        {
+                            Id = "ab42ed04-acc8-40e2-9c3d-c2865ae3756c",
+                            ConcurrencyStamp = "bd8dd589-a510-4fe6-9d63-2201a84985bf",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -288,15 +304,13 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserTokens", "security");
                 });
 
-            modelBuilder.Entity("Core.Auth.RefreshTokenDevCreed", b =>
+            modelBuilder.Entity("DataTransferObject.Entity.RefreshTokenDevCreed", b =>
                 {
-                    b.HasOne("Core.Auth.User", "User")
+                    b.HasOne("DataTransferObject.Entity.User", null)
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -310,7 +324,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Core.Auth.User", null)
+                    b.HasOne("DataTransferObject.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -319,7 +333,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Core.Auth.User", null)
+                    b.HasOne("DataTransferObject.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,7 +348,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Auth.User", null)
+                    b.HasOne("DataTransferObject.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -343,14 +357,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Core.Auth.User", null)
+                    b.HasOne("DataTransferObject.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Core.Auth.User", b =>
+            modelBuilder.Entity("DataTransferObject.Entity.User", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });

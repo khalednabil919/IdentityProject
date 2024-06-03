@@ -7,7 +7,7 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class seeding2Roles : Migration
+    public partial class SeedRoles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,8 +18,8 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2b8da07a-d914-4036-a66f-c5bb4890d620", "c41f0d91-e8c9-4a05-b7ba-a300c2b83f9c", "Administrator", "ADMINISTRATOR" },
-                    { "3135210b-e627-4214-ab59-50ba268a3c9b", "b7564c96-8817-472a-9d59-c5237da9a576", "Visitor", "VISITOR" }
+                    { "ab42ed04-acc8-40e2-9c3d-c2865ae3756c", "bd8dd589-a510-4fe6-9d63-2201a84985bf", "Administrator", "ADMINISTRATOR" },
+                    { "e1c1e2a6-44b5-4b07-a520-f2772732e4f1", "cd9ddc08-10a9-49c5-8c14-1f4b4e38d665", "Visitor", "VISITOR" }
                 });
         }
 
@@ -30,13 +30,13 @@ namespace Infrastructure.Migrations
                 schema: "security",
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "2b8da07a-d914-4036-a66f-c5bb4890d620");
+                keyValue: "ab42ed04-acc8-40e2-9c3d-c2865ae3756c");
 
             migrationBuilder.DeleteData(
                 schema: "security",
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "3135210b-e627-4214-ab59-50ba268a3c9b");
+                keyValue: "e1c1e2a6-44b5-4b07-a520-f2772732e4f1");
         }
     }
 }

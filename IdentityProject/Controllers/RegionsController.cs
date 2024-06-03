@@ -18,6 +18,7 @@ namespace IdentityProject.Controllers
         }
         [HttpPost("CreateRegion")]
         //[Authorization("")]
+        [Authorize(Roles ="edit,delete")]
         public async Task<IActionResult> CreateRegion(Region region)
         {
             if (!ModelState.IsValid)
