@@ -578,6 +578,7 @@ namespace BusinessLogic.Services.Auth
                     new Claim(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    //new Claim("Role","Create")
             }
            .Union(userClaims)
            .Union(roleClaims);

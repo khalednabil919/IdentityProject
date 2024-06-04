@@ -3,12 +3,15 @@ using Core.Entities;
 using Core.Interfaces;
 using DataTransferObject.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace IdentityProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles ="edit,Visitor")]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionService _regionService;
@@ -18,23 +21,31 @@ namespace IdentityProject.Controllers
         }
         [HttpPost("CreateRegion")]
         //[Authorization("")]
-        [Authorize(Roles ="edit,delete")]
+        [Authorize(Policy = "CreateRegionPolicy")]
+        //[Authorize(Policy = "FirstPolicy")]
+        //[Authorize(Roles = "Create,Khaled")]
+        //[Authorize(Roles ="Visitor")]
+        //[Authorize(Roles ="edit")]
+        //[Authorize(Roles ="Create")]
         public async Task<IActionResult> CreateRegion(Region region)
         {
-            if (!ModelState.IsValid)
+             if (!ModelState.IsValid)
                 return BadRequest(new APIResult { message = ModelState.ToString() });
             var regionResult = await _regionService.Create(region);
             return Ok(regionResult);
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Policy = "SuperAdminandVisitorandCreate")]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(new APIResult { message = ModelState.ToString() });
             var region = await _regionService.GetAll();
             return Ok(region);
-        } 
+        }
+
+        [Authorize(Policy = "SuperAdminORVisitorandCreate")]
         [HttpGet("GetRegion/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

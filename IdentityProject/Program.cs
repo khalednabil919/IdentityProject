@@ -23,6 +23,9 @@ using Autofac.Core;
 using Microsoft.OpenApi.Models;
 using BusinessLogic.MiddleWares;
 using DataTransferObject.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using System.ComponentModel.DataAnnotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -150,7 +153,51 @@ builder.Services.AddSwaggerGen(c => {
             new string[] {}
         }
     });
-}); 
+});
+
+builder.Services.AddAuthorizationCore(options =>
+{
+    //user should have role of Create and edit in roles in token roles;[Create,edit]
+    options.AddPolicy("FirstPolicy", policy =>
+    {
+        //roles array should contain Create and Edit 
+        //roles refer to word use by identity and this word in my code contains roles of the user and claims of that user and claims
+        //related to that roles
+        policy.RequireRole("Create");
+        policy.RequireRole("edit");
+    });
+
+    //first policy: user should have Create or edit claim under Role Claim Type
+    //second policy: user should have Create and edit claim under Role Claim Type
+    options.AddPolicy("CreateRegionPolicy", policy =>
+    {
+        //first policy
+        //token contain ClaimValue: Create or edit With Claim Type:Role
+        policy.RequireClaim("Role", "Create", "Edit");
+
+        //second policy
+        //token should contain ClaimValue: Create and edit With Claim Type:Role 
+        //policy.RequireClaim("Role", "Create")
+        //      .RequireClaim("Role","Edit");
+    });
+
+    //user should have role Visitor and Super Admin  and ClaimValue: Create With Claim Type:Role 
+    options.AddPolicy("SuperAdminandVisitorandCreate", policy =>
+    {
+        policy.RequireRole("Visitor")
+              .RequireRole("Super Admin")
+              .RequireClaim("Role", "Create");
+    });
+
+    //user should have role visitor and ClaimValue: Create With Claim Type:Role  OR user should have role Super Admin
+    options.AddPolicy("SuperAdminORVisitorandCreate", policy =>
+    {
+        policy.RequireAssertion(context =>
+                            context.User.IsInRole("Visitor") && context.User.HasClaim(c => c.Type == "Role" && c.Value == "Create") ||
+                            context.User.IsInRole("Super Admin"));
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
