@@ -26,6 +26,7 @@ using DataTransferObject.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.ComponentModel.DataAnnotations;
+using BusinessLogic.CustomAuthorizationPolicy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -155,6 +156,7 @@ builder.Services.AddSwaggerGen(c => {
     });
 });
 
+
 builder.Services.AddAuthorizationCore(options =>
 {
     //user should have role of Create and edit in roles in token roles;[Create,edit]
@@ -196,7 +198,13 @@ builder.Services.AddAuthorizationCore(options =>
                             context.User.IsInRole("Visitor") && context.User.HasClaim(c => c.Type == "Role" && c.Value == "Create") ||
                             context.User.IsInRole("Super Admin"));
     });
+
+    options.AddPolicy("AdminCantEditHimSelf", policy =>
+    policy.Requirements.Add(new ManageAdminRolesAndClaimsRequirement()));
+
+
 });
+builder.Services.AddScoped<IAuthorizationHandler, CanEditOnlyAdminRolesAndClaimsHandler>();
 
 var app = builder.Build();
 

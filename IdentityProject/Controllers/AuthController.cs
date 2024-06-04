@@ -165,5 +165,16 @@ namespace IdentityProject.Controllers
             return Ok(await _authService.GetNewAccessToken(refreshToken));
         }
 
+        [Authorize(Policy = "AdminCantEditHimSelf")]
+        [HttpGet("EditUser")]
+        public IActionResult EditUser([FromQuery]Guid userId)
+        {
+             int x = 0;
+            return Ok();
+
+        }
+
+     
+
     }
 }

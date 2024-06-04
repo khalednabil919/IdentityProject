@@ -4,4 +4,5 @@ namespace BusinessLogic.CustomAuthorizationPolicy;
 
 public class ManageAdminRolesAndClaimsRequirement:IAuthorizationRequirement
 {
+   
 }
