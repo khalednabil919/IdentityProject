@@ -38,7 +38,7 @@ namespace BusinessLogic.MiddleWares
             if (result != null)
             {
 
-                if (result.Split(" ")[0] != "Bearer")
+                if (result.Split(" ")[0]  != "Bearer")
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     context.Response.ContentType = "application/json";
