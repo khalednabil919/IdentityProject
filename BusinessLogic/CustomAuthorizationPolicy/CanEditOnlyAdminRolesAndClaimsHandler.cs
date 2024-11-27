@@ -20,6 +20,13 @@ public class CanEditOnlyAdminRolesAndClaimsHandler : AuthorizationHandler<Manage
             && context.User.HasClaim(x => x.Type == "ID" && x.Value.ToString() != Id))
             context.Succeed(requirement);
 
+        //if you write context.Fail() so you gurantee that if the other custom policy return context.Succeed(requirement)
+        //it won't give the access at all so if you want to take the access based on another custom policies just return Task.CompletedTask
+        //if you want to prevent code from checking other custom policy after setting this policy context.Fail()
+        //just in the program set this line     options.InvokeHandlersAfterFailure = false;
+
+        //else
+        //    context.Fail();
         return Task.CompletedTask;
     }
 }

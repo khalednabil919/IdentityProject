@@ -201,10 +201,13 @@ builder.Services.AddAuthorizationCore(options =>
 
     options.AddPolicy("AdminCantEditHimSelf", policy =>
     policy.Requirements.Add(new ManageAdminRolesAndClaimsRequirement()));
+    
+    //options.InvokeHandlersAfterFailure = false;
 
 
 });
 builder.Services.AddScoped<IAuthorizationHandler, CanEditOnlyAdminRolesAndClaimsHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, AnotherCustomerPolicyHandler>();
 
 var app = builder.Build();
 
